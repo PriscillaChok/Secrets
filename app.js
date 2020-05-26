@@ -4,6 +4,7 @@ const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
+const encrypt = require("mongoose-encryption");
 
 const app = express();
 
@@ -18,6 +19,9 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String
 });
+
+const secret = "Thisisourlittlesecret.";
+userSchema.plugin(encrypt, { secret: secret, encryptedField: ["password"] });
 
 const User = new mongoose.model("User", userSchema);
 
@@ -66,4 +70,4 @@ app.post("/login", function(req,res){
 
 app.listen(3000, function(){
   console.log("Server started on port 3000");
-})
+});
